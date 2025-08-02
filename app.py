@@ -24,8 +24,15 @@ if 'output' not in st.session_state:
         st.error("📡 IP address: 192.168.43.127")
         time.sleep(1.7)
         
-        os.system("afplay screen-capture-sound-on-phone-or-pc.mp3")  # Replace with your file name
         st.error("💾 Screenshot taken and archived.")
+        st.markdown(
+        """
+        <audio autoplay>
+        <source src="https://sounddino.com/mp3/5/screen-capture-sound-on-phone-or-pc.mp3">
+        </audio>
+        """,
+        unsafe_allow_html=True
+    )
         time.sleep(1.3)
 
         st.error("💀 You have 30 seconds to disconnect.")
@@ -66,6 +73,5 @@ else:
             st.session_state['messages'].append({'role': 'assistant', 'content': ai_response})
             st.text(ai_response)
                 
-    
- 
-                
+
+
