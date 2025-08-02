@@ -11,9 +11,7 @@ import os
 import streamlit as st
 
 
-openai_api_key = st.secrets["OPENAI_API_KEY"]
-
-llm = ChatOpenAI(openai_api_key=openai_api_key)
+llm = ChatOpenAI(openai_api_key=st.secrets["OPENAI_API_KEY"])
 
 class ChatState(TypedDict):
     messages: Annotated[list[BaseMessage], add_messages]
