@@ -15,7 +15,7 @@ if 'output' not in st.session_state:
         st.session_state['output'] = st.session_state['user_id']
         st.rerun()
    
-    elif st.session_state['user_id'] != '7':
+    elif st.session_state['user_id'] != '7' and st.session_state['user_id'] != None :
         st.error("🚨 Unauthorized access detected!")
         time.sleep(1.5)
 
@@ -49,14 +49,12 @@ if 'output' not in st.session_state:
         unsafe_allow_html=True
         )
         
-    elif st.session_state['user_id'] == None:
+    else:
         
         st.markdown("---")  # horizontal line for visual break
         st.markdown("### 👤 User Identification")
         st.markdown("Please enter your unique ID to proceed.")
         st.info("Waiting for input...")
-    else:
-        pass
     
     
 else:
