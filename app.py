@@ -6,7 +6,7 @@ from backend import workflow
 import os
 
 if 'output' not in st.session_state:
-    user_id = st.text_input("🔐 Enter your ID",)
+    user_id = st.chat_input("🔐 Enter your ID", )
     
     if user_id in ['7']:    
         st.success(f"ID received: `{user_id}`")
