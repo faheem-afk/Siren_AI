@@ -55,6 +55,8 @@ if 'output' not in st.session_state:
         st.markdown("### 👤 User Identification")
         st.markdown("Please enter your unique ID to proceed.")
         st.info("Waiting for input...")
+    else:
+        pass
     
     
 else:
