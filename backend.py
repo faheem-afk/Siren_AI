@@ -14,7 +14,7 @@ import streamlit as st
 
 # load_dotenv()
 
-open_api_key = st.secrets["OPEN_API_KEY"]
+open_api_key = st.secrets["OPENAI_API_KEY"]
 llm = ChatOpenAI(open_api_key=open_api_key)
 
 class ChatState(TypedDict):
