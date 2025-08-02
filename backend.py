@@ -8,11 +8,14 @@ from langgraph.graph.message import add_messages
 from langgraph.checkpoint.memory import InMemorySaver
 import time
 import os
+import streamlit as st
 
 
 
-load_dotenv()
-llm = ChatOpenAI()
+# load_dotenv()
+
+open_api_key = st.secrets["OPEN_API_KEY"]
+llm = ChatOpenAI(open_api_key=open_api_key)
 
 class ChatState(TypedDict):
     messages: Annotated[list[BaseMessage], add_messages]
