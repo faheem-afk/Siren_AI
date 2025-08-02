@@ -15,7 +15,7 @@ if 'output' not in st.session_state:
         st.session_state['output'] = st.session_state['user_id']
         st.rerun()
    
-    elif st.session_state['user_id'] != '7' and st.session_state['user_id'] != '' :
+    elif st.session_state['user_id'] != '7' and st.session_state['user_id'] is not None :
         st.error("🚨 Unauthorized access detected!")
         time.sleep(1.5)
 
