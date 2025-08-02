@@ -10,12 +10,12 @@ if 'output' not in st.session_state:
     if 'user_id' not in st.session_state:
         st.session_state['user_id'] = st.chat_input("🔐 Enter your ID", )
         
-    if st.session_state['user_id'] in ['7']:    
+    if st.session_state['user_id'] == '7':    
         st.success(f"ID received: `{st.session_state['user_id']}`")
         st.session_state['output'] = st.session_state['user_id']
         st.rerun()
    
-    elif st.session_state['user_id'] != None:
+    elif st.session_state['user_id'] != '7':
         st.error("🚨 Unauthorized access detected!")
         time.sleep(1.5)
 
@@ -49,12 +49,13 @@ if 'output' not in st.session_state:
         unsafe_allow_html=True
         )
         
-    else:
+    elif st.session_state['user_id'] == None:
         
         st.markdown("---")  # horizontal line for visual break
         st.markdown("### 👤 User Identification")
         st.markdown("Please enter your unique ID to proceed.")
         st.info("Waiting for input...")
+    
     
 else:
     
