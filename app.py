@@ -32,14 +32,22 @@ if 'output' not in st.session_state:
         </audio>
         """,
         unsafe_allow_html=True
-    )
+        )
         time.sleep(1.3)
 
         st.error("💀 You have 30 seconds to disconnect.")
         time.sleep(1.3)
         
         st.error("📞 Calling 911 and reporting digital break-in.")
-        os.system("afplay car-siren-police-ambulance-fire.mp3 &")  
+        st.markdown(
+        """
+        <audio autoplay>
+        <source src="https://sounddino.com/mp3/35/car-siren-police-ambulance-fire.mp3">
+        </audio>
+        """,
+        unsafe_allow_html=True
+        )
+        
     else:
         st.title("State your Id ...")
     
