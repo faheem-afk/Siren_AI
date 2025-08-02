@@ -6,15 +6,14 @@ from backend import workflow
 import os
 
 if 'output' not in st.session_state:
-    res = st.chat_input('write your id...', )
+    user_id = st.text_input("🔐 Enter your ID",)
     
-    if res in ['1', '2', '3']:    
-    
-        st.session_state['output'] = res
+    if user_id in ['7']:    
+        st.success(f"ID received: `{user_id}`")
+        st.session_state['output'] = user_id
         st.rerun()
    
-    elif res != None:
-        st.title("")
+    elif user_id != None:
         st.error("🚨 Unauthorized access detected!")
         time.sleep(1.5)
 
@@ -49,7 +48,11 @@ if 'output' not in st.session_state:
         )
         
     else:
-        st.title("State your Id ...")
+        
+        st.markdown("---")  # horizontal line for visual break
+        st.markdown("### 👤 User Identification")
+        st.markdown("Please enter your unique ID to proceed.")
+        st.info("Waiting for input...")
     
 else:
     
