@@ -84,15 +84,15 @@ else:
                                      stream_mode='messages'
                                      )
             
-            # ai_response = st.write_stream(message_chunk.content for message_chunk, _ in stream)
+            ai_response = st.write_stream(message_chunk.content for message_chunk, _ in stream)
             
-            ai_response = ""
-            placeholder = st.empty()
-            for message_chunk, _ in stream:
-                if message_chunk.content:
-                    ai_response +=  message_chunk.content + " "
-                    placeholder.text(ai_response)
-                    time.sleep(0.04)
+            # ai_response = ""
+            # placeholder = st.empty()
+            # for message_chunk, _ in stream:
+            #     if message_chunk.content:
+            #         ai_response +=  message_chunk.content + " "
+            #         placeholder.text(ai_response)
+            #         time.sleep(0.04)
                     
             st.session_state['messages'].append({'role': 'assistant', 'content': ai_response})
                 
