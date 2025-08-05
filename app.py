@@ -74,19 +74,17 @@ else:
 
         with st.chat_message('user'):
             st.text(response)    
-            
+        
+        
         with st.chat_message('assistant'):
-            thread_id = '2'
-            config = {"configurable": {"thread_id": thread_id}}
-            
-            stream = workflow.stream({'messages': [HumanMessage(response)]}, 
-                                     config = {'configurable': {'thread_id': thread_id}},
-                                     stream_mode='messages'
-                                     )
-            
-            ai_response = st.write_stream(message_chunk.content for message_chunk, _ in stream)
-                    
-            st.session_state['messages'].append({'role': 'assistant', 'content': ai_response})
-                
 
+            ai_message = st.write_stream(
+                 message_chunk.content for message_chunk, _ in workflow.stream(
+                    {'messages': [HumanMessage(content=response)]},
+                    config= {'configurable': {'thread_id': 'thread-1'}},
+                    stream_mode= 'messages'
+                )
+            )
 
+        st.session_state['messages'].append({'role': 'assistant', 'content': ai_message})
+       
