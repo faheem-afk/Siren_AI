@@ -70,29 +70,21 @@ else:
     response = st.chat_input("write something here:..", )
 
     if response:
-        st.session_state['messages'].append({'role': 'user', 'content': HumanMessage(response).content})
+        st.session_state['messages'].append({'role': 'user', 'content': response})
 
         with st.chat_message('user'):
             st.text(response)    
             
         with st.chat_message('assistant'):
-            thread_id = '1'
+            thread_id = '2'
             config = {"configurable": {"thread_id": thread_id}}
             
-            stream = workflow.stream({'messages': [HumanMessage(content=response)]}, 
+            stream = workflow.stream({'messages': [HumanMessage(response)]}, 
                                      config = {'configurable': {'thread_id': thread_id}},
                                      stream_mode='messages'
                                      )
             
             ai_response = st.write_stream(message_chunk.content for message_chunk, _ in stream)
-            
-            # ai_response = ""
-            # placeholder = st.empty()
-            # for message_chunk, _ in stream:
-            #     if message_chunk.content:
-            #         ai_response +=  message_chunk.content + " "
-            #         placeholder.text(ai_response)
-            #         time.sleep(0.04)
                     
             st.session_state['messages'].append({'role': 'assistant', 'content': ai_response})
                 
