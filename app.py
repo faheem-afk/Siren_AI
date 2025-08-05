@@ -16,12 +16,6 @@ if 'output' not in st.session_state:
     elif user_id != None:
         st.error("🚨 Unauthorized access detected!")
         time.sleep(1.5)
-
-        st.error("📡 Tracing IP address...")
-        time.sleep(1.7)
-        
-        st.error("📡 IP address: 192.168.43.127")
-        time.sleep(1.7)
         
         st.error("💾 Screenshot taken and archived.")
         st.markdown(
@@ -36,8 +30,7 @@ if 'output' not in st.session_state:
 
         st.error("💀 You have 30 seconds to disconnect.")
         time.sleep(1.3)
-        
-        st.error("📞 Calling 911 and reporting digital break-in.")
+    
         st.markdown(
         """
         <audio autoplay>
@@ -52,7 +45,6 @@ if 'output' not in st.session_state:
         st.markdown("---")  # horizontal line for visual break
         st.markdown("### 👤 User Identification")
         st.markdown("Please enter your unique ID to proceed.")
-        st.info("Waiting for input...")
     
 else:
     
@@ -67,7 +59,7 @@ else:
             st.text(role_content['content'])
 
         
-    response = st.chat_input("write something here:..", )
+    response = st.chat_input("write something here:..")
 
     if response:
         st.session_state['messages'].append({'role': 'user', 'content': response})

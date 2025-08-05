@@ -10,9 +10,9 @@ import time
 import os
 import streamlit as st
 
-# load_dotenv()
-openai_api_key = st.secrets.get("OPENAI_API_KEY")
-llm = ChatOpenAI(openai_api_key=openai_api_key)
+load_dotenv()
+# openai_api_key = st.secrets.get("OPENAI_API_KEY")
+llm = ChatOpenAI()
 
 class ChatState(TypedDict):
     messages: Annotated[list[BaseMessage], add_messages]
