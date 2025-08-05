@@ -1,9 +1,9 @@
+import time
 import streamlit as st
 import time
-import streamlit.components.v1 as components
-from langchain_core.messages import AIMessage, HumanMessage, BaseMessage
+from langchain_core.messages import HumanMessage
 from backend import workflow
-import os
+
 
 if 'output' not in st.session_state:
     user_id = st.chat_input("🔐 Enter your ID", )
@@ -84,7 +84,15 @@ else:
                                      stream_mode='messages'
                                      )
             
-            ai_response = st.write_stream(message_chunk.content for message_chunk, _ in stream)
+            # ai_response = st.write_stream(message_chunk.content for message_chunk, _ in stream)
+            
+            ai_response = ""
+            placeholder = st.empty()
+            for message_chunk, _ in stream:
+                if message_chunk.content:
+                    ai_response +=  message_chunk.content + " "
+                    placeholder.text(ai_response)
+                    time.sleep(0.04)
                     
             st.session_state['messages'].append({'role': 'assistant', 'content': ai_response})
                 
