@@ -79,10 +79,14 @@ else:
             thread_id = '1'
             config = {"configurable": {"thread_id": thread_id}}
             
-            ai_response = workflow.invoke({"messages": HumanMessage(response)}, config=config)['messages'][-1].content
+            stream = workflow.stream({'messages': [HumanMessage(content=response)]}, 
+                                     config = {'configurable': {'thread_id': thread_id}},
+                                     stream_mode='messages'
+                                     )
             
+            ai_response = st.write_stream(message_chunk.content for message_chunk, _ in stream)
+                    
             st.session_state['messages'].append({'role': 'assistant', 'content': ai_response})
-            st.text(ai_response)
                 
 
 
