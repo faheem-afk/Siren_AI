@@ -9,17 +9,16 @@ from langgraph.checkpoint.memory import InMemorySaver
 
 import streamlit as st
 
-load_dotenv()
-# openai_api_key = st.secrets.get("OPENAI_API_KEY")
-# openai_api_key=openai_api_key
-llm = ChatOpenAI()
+# load_dotenv()
+openai_api_key = st.secrets.get("OPENAI_API_KEY")
+llm = ChatOpenAI(openai_api_key=openai_api_key)
 
 class ChatState(TypedDict):
     messages: Annotated[list, add_messages]
     
     
 def chatbot(ChatState) -> dict:
-    message = llm.invoke(ChatState['messages']).content
+    message = llm.invoke(ChatState['messages'])
     
     return {"messages": [message]}
 
