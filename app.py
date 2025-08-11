@@ -1,82 +1,99 @@
-import time
 import streamlit as st
 import time
 from langchain_core.messages import HumanMessage
 from backend import workflow
+import uuid
 
 
-if 'output' not in st.session_state:
-    user_id = st.chat_input("🔐 Enter your ID", )
-    
-    if user_id in ['7']:    
-        st.success(f"ID received: `{user_id}`")
-        st.session_state['output'] = user_id
-        st.rerun()
-   
-    elif user_id != None:
-        st.error("🚨 Unauthorized access detected!")
-        time.sleep(1.5)
-        
-        st.error("💾 Screenshot taken and archived.")
-        st.markdown(
-        """
-        <audio autoplay>
-        <source src="https://sounddino.com/mp3/5/screen-capture-sound-on-phone-or-pc.mp3">
-        </audio>
-        """,
-        unsafe_allow_html=True
-        )
-        time.sleep(1.3)
+# utility functions:
 
-        st.error("💀 You have 30 seconds to disconnect.")
-        time.sleep(1.3)
+def generate_thread_id():
+    thread_id = uuid.uuid4()
+    return thread_id
+
+
+def reset_chat():
+    st.session_state['messages'] = []
     
-        st.markdown(
-        """
-        <audio autoplay>
-        <source src="https://sounddino.com/mp3/35/car-siren-police-ambulance-fire.mp3">
-        </audio>
-        """,
-        unsafe_allow_html=True
-        )
-        
-    else:
-        
-        st.markdown("---")  # horizontal line for visual break
-        st.markdown("### 👤 User Identification")
-        st.markdown("Please enter your unique ID to proceed.")
     
+def append_threads(id):
+    st.session_state['thread_history'].append(id)
+    
+
+def load_conversation(id):
+    CONFIG = {'configurable': {'thread_id': id}}
+    return workflow.get_state(config=CONFIG).values['messages']
+
+    
+# check if the message list exist in the session_state 
+st.title("🧠 Chatbot")
+if 'messages' in st.session_state:
+    pass
 else:
+    st.session_state['messages'] = []
+
+if 'thread_history' not in st.session_state:
+    st.session_state['thread_history'] = []
+
+if 'thread_id' not in st.session_state:
+    st.session_state['thread_id'] = str(generate_thread_id())
+    append_threads(str(st.session_state['thread_id']))
+        
+
+# add a sidebar to the chatbot
+st.sidebar.title("Langraph Chatbot")    
+sidebar_button = st.sidebar.button("New Chat")
+if sidebar_button:
+    generated_id = str(generate_thread_id())
+    st.session_state['thread_id'] = generated_id
+    append_threads(generated_id)
+    reset_chat()
     
-    st.title("🧠 Chatbot")
-    if 'messages' in st.session_state:
-        pass
-    else:
-        st.session_state['messages'] = []
+    
+st.sidebar.header("My Conversations")
+for index, id_ in enumerate(st.session_state['thread_history']):
+        if st.sidebar.button(f'chat {index+1}'):
+            reset_chat()
+            
+            st.session_state['thread_id'] = id_
+            CONFIG = {'configurable': {'thread_id': id_}}
+            if 'messages' in workflow.get_state(config=CONFIG).values:
+                messages = load_conversation(id_)
+            
+                for idx, messg in enumerate(messages):
+                    if (idx+1) % 2 != 0:
+                        st.session_state['messages'].append({'role': 'user', 'content': messg.content})
+                    else:
+                        st.session_state['messages'].append({'role': 'assistant', 'content': messg.content})
+                        
+            
 
-    for role_content in st.session_state['messages']:
-        with st.chat_message(role_content['role']):
-            st.text(role_content['content'])
+# re-render all the saved messages from the message variable in session state for any effect
+for role_content in st.session_state['messages']:
+    with st.chat_message(role_content['role']):
+        st.text(role_content['content'])
 
-        
-    response = st.chat_input("write something here:..")
 
-    if response:
-        st.session_state['messages'].append({'role': 'user', 'content': response})
+# input box
+response = st.chat_input("write something here...")
 
-        with st.chat_message('user'):
-            st.text(response)    
-        
-        
-        with st.chat_message('assistant'):
+# execute this if the user writes something to the chatbot
+if response:
+    st.session_state['messages'].append({'role': 'user', 'content': response})
 
-            ai_message = st.write_stream(
-                 message_chunk.content for message_chunk, _ in workflow.stream(
-                    {'messages': [HumanMessage(content=response)]},
-                    config= {'configurable': {'thread_id': 'thread-1'}},
-                    stream_mode= 'messages'
-                )
+    with st.chat_message('user'):
+        st.text(response)    
+    
+    # send the user's response to the chatbot for processing
+    with st.chat_message('assistant'):
+
+        ai_message = st.write_stream(
+                message_chunk.content for message_chunk, _ in workflow.stream(
+                {'messages': [HumanMessage(content=response)]},
+                config= {'configurable': {'thread_id': st.session_state['thread_id']}},
+                stream_mode= 'messages'
             )
-
-        st.session_state['messages'].append({'role': 'assistant', 'content': ai_message})
-       
+        )
+    # save the ai assistant's reponse in the message variable of the session state
+    st.session_state['messages'].append({'role': 'assistant', 'content': ai_message})
+    
